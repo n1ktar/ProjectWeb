@@ -2,3 +2,4 @@
 2. Запускаем файл run.bat
 3. Скрипт для создания пользователя create_user.py(добавлен на сайт в виде /register)
 4. Скрипт-опросник - answer.py 
+5. Вызвать endpoint test - "/endpoint"
