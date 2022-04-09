@@ -27,7 +27,8 @@ class User(db.Model, UserMixin):
         return '<user {}>'.format(self.email)
 
 class UserInfo(db.Model):
-    user_id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer(), nullable=False)
     username = db.Column(db.String(50), index=True, unique=True)
     name = db.Column(db.String(50))
     sex = db.Column(db.String(50))
@@ -35,10 +36,12 @@ class UserInfo(db.Model):
     city = db.Column(db.String(50))
     hobby = db.Column(db.String(50))
     genre = db.Column(db.String(50))
+    smoke = db.Column(db.String(50))
+    alko = db.Column(db.String(50))
     socity = db.Column(db.String(50))
 
     def get_id(self):
-        return (self.user_id)
+        return (self.id)
 
     def __repr__(self):
         return '<user {}>'.format(self.username)

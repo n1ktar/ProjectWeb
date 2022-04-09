@@ -4,8 +4,8 @@ from flask_login import LoginManager, current_user, login_user, logout_user
 from flask_migrate import Migrate
 import json
 
-from webapp.forms import LoginForm, RegistrationForm
-from webapp.user import db, User
+from webapp.forms import LoginForm, RegistrationForm, AnswerForm
+from webapp.user import UserInfo, db, User
 
 def create_app():
     app = Flask(__name__)
@@ -79,12 +79,36 @@ def create_app():
             return redirect(url_for('login'))
         else:
             for field, errors in form.errors.items():
-                for errors in errors:
+                for error in errors:
                     flash('Ошибка в поле "{}": {}'.format(
                         getattr(form, field).label.text,
                         error
                     ))
         return redirect(url_for('register'))
+
+    @app.route('/profile')
+    def profile():
+        title = 'Профиль'
+        form = AnswerForm()
+        return render_template('user/profile.html', page_title=title, form=form)
+
+    @app.route('/process-answ', methods = ['POST'])
+    def process_answ():
+        form = AnswerForm()
+        if form.validate_on_submit():
+            new_answer = UserInfo(user_id=current_user.user_id, username=current_user.username, name=form.name.data, sex=form.sex.data, age=form.age.data, city=form.city.data, hobby=form.hobby.data, genre=form.genre.data, smoke=form.smoke.data, alko=form.alko.data, socity=form.socity.data )
+            db.session.add(new_answer)
+            db.session.commit()
+            flash('Вы успешно заполнили профиль!')
+            return redirect(url_for('index'))
+        else:
+            for field, errors in form.errors.items():
+                for error in errors:
+                    flash('Ошибка в поле "{}": {}'.format(
+                        getattr(form, field).label.text,
+                        error
+                    ))
+        return redirect(url_for('profile'))
 
     return app
 
