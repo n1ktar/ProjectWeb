@@ -1,8 +1,11 @@
 from distutils.log import error
 from flask import Flask, render_template, flash, redirect, url_for
 from flask_login import LoginManager, current_user, login_user, logout_user
+
 from flask_migrate import Migrate
+import requests
 import json
+from webapp.edit import save_changes
 
 from webapp.forms import LoginForm, RegistrationForm, AnswerForm
 from webapp.user import UserInfo, db, User
@@ -91,6 +94,7 @@ def create_app():
         title = 'Профиль'
         form = AnswerForm()
         return render_template('user/profile.html', page_title=title, form=form)
+        
 
     @app.route('/process-answ', methods = ['POST'])
     def process_answ():
@@ -109,6 +113,25 @@ def create_app():
                         error
                     ))
         return redirect(url_for('profile'))
+        
+    @app.route('/edit', methods=['GET', 'POST'])
+    def edit():
+        id = current_user.user_id
+        qry = db.session.query(UserInfo).filter(
+                    UserInfo.user_id==id)
+        edit = qry.first()
+        if edit:
+            form = AnswerForm(obj=edit)
+            if form.validate_on_submit():
+                # save edits
+                save_changes(edit, form)
+                flash('Album updated successfully!')
+                return redirect('/')
+            return render_template('user/edit.html', form=form)
+        else:
+            return 'Error loading #{id}'.format(id=user_id)
 
+            
+            
     return app
 

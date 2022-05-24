@@ -1,0 +1,61 @@
+{% extends "base.html"%}
+
+{% block content %}
+    <div class="row">
+        <div class="col-4">
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                <div class="alert alert-warning" role="alert">
+                    {% for message in messages %}
+                        {{ message }}<br>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            {% endwith %}
+            <h2>Профиль</h2>
+            <form action="{{ url_for('process_answ') }}" method="POST">
+                {{ form.hidden_tag() }}
+                <div class="form-group">
+                    {{ form.name.label }}<br>
+                    {{ form.name() }}
+                </div>
+                <div class="form-group">
+                    {{ form.sex.label }}
+                    {{ form.sex() }}
+                </div>
+                <div class="form-group">
+                    {{ form.age.label }}<br>
+                    {{ form.age() }}
+                </div>
+                <div class="form-group">
+                    {{ form.city.label }}<br>
+                    {{ form.city() }}
+                </div>
+                <div class="form-group">
+                    {{ form.hobby.label }}
+                    {{ form.hobby() }}
+                </div>
+                <div class="form-group">
+                    {{ form.genre.label }}
+                    {{ form.genre() }}
+                </div>
+                <div class="form-group">
+                    {{ form.smoke.label }}
+                    {{ form.smoke() }}
+                </div>
+                <div class="form-group">
+                    {{ form.alko.label }}
+                    {{ form.alko() }}
+                </div>
+                <div class="form-group">
+                    {{ form.socity.label }}
+                    {{ form.socity() }}
+                </div>
+                {{ form.submit() }}
+            </form>
+        </div>
+        <div class="col-8">
+            
+        </div>
+    </div>
+{% endblock %}
